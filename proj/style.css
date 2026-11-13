@@ -1,7 +1,39 @@
 body {
   max-width: 720px;
   margin: 0 auto;
-  /* background-color: #fff1e7; */
+  background-color: #f2f0ef;
+}
+
+.btnImage {
+  margin-left: auto;
+  position: relative;
+  width: 175px;
+}
+
+.btnImage img {
+    width: 175px;
+    display: block;
+}
+
+.btnVerificar {
+  border: 2px solid black;
+  position: absolute;
+  width: 87px;
+  height: 62px;
+  left: 50%;
+  top: 70%;
+  border-radius: 2px 6px 2px 4px;
+  background-color: white;
+  transform: translate(-100%, -14%);
+}
+
+button {
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: lightblue;
 }
 
 .matriz {
@@ -108,7 +140,7 @@ select {
 }
 
 header {
-  background-color: #998100;
+  background-color: #001899; /*#998100;*/
   margin: 0 auto;
 }
 
