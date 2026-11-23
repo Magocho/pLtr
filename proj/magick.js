@@ -1,213 +1,286 @@
-const bffr = document.getElementById("entrada");
-const stdout = document.getElementById("saida");
-const selectConversor = document.getElementById("conversorselect");
+/* Matriz inputs */
+const clueBffr = document.querySelectorAll(".idica");
+const resBffr  = document.querySelectorAll(".iletra");
 
-// mc = [4, 6, 10, 15] https://www.mcdonalds.com.br/cardapio
-// bk = [4, 6, 10]     https://www.burgerking.com.br/cardapio/bk-chicken
-// bb = [4, 6, 12]     https://bobs.com.br/cardapio/acompanhamentos/franlitos
-// obs. franlito foi tem frango empanado
-// mas tiras de frango não
-// gf = [2, 4, 6]      https://www.giraffas.com.br/cardapio 
-// sassami empanado
-// Madeiro usei o cardapio madeiro e jeromio obs. não tem por unidade então usei os valores de coxinha
+/* Todos os botões */
+const initBtn    = document.getElementById("preparar");
+const verfBtn    = document.getElementById("verif");
+const reservaBtn = document.getElementById("reserva");
+const fecharBtn  = document.getElementById("fechar");
+const okBtn      = document.getElementById("okPopUp");
+const randomBtn  = document.getElementById("sorte");
 
-const precedencia = { '+': 1, '-': 1, '?': 2 , '*': 3, '/': 3, '^': 4 };
-const mmcB = { 'M': 1, 'K': 2, 'B': 2, 'G': 2, 'J': 2, 'P': 1 };          // mmc já calculados
-const nuggetB = { 'M': [4, 6, 10, 15], 'K': [4, 6, 10], 'B': [4, 6, 12],  // coeficientes dos vetor nugget                                    
-                  'G': [2, 4, 6], 'J': [8, 16, 24, 32], 'P': [2, 3, 4, 5, 6, 10, 12, 14, 15]};
+/* Elementos de show e hidden */
+const cmt          = document.getElementById("comment");
+const popUp        = document.getElementById("popUp");
+const timerDisplay = document.getElementById("timer");
+const popUpNum     = document.getElementById("mNumero");
 
-function combLinNugget(b, B, t) {
-  const quant = new Array(b + 1).fill(Infinity);
-  const vetor = new Array(b + 1).fill(0);
+/* Ah... var globais */
+let id            = 1;
+let ok            = new Array(20).fill(false);
+let res           = new Array(20);
+let clue          = new Array(5)
+let puzzles       = [];
+let segundos      = 0;
+let timerInterval = null;
 
-  quant[0] = 0;
+async function loadPuzzles() {
+  const response = await fetch("s.txt");
+  const txt = await response.text();
 
-  for(let num = 1; num <= b; num++) {
-    for(const nugget of nuggetB[B]) {
-      if(nugget <= num && quant[num - nugget] + 1 < quant[num]) {
-        quant[num] = quant[num - nugget] + 1;
-        vetor[num] = nugget;
-      }
-    }
-  }
-
-  if(quant[b] === Infinity) {
-    throw new Error("ERROR: Não é válido para " + B);
-  }
-
-  if(t) {
-    const res = [];
-    let i = b;
-    while(i > 0) {
-      res.push(vetor[i]);
-      i -= vetor[i];
-    }
-    return res;
-  }
-
-  return true;
+  puzzles = txt.trim().split(/\r?\n/);
 }
 
-function doOp(op, a, b) {
-  switch(op) {
-    case "+": return a + b;
-    case "-": return a - b;
-    case "*": return a * b;
-    case "/": return a / b;
-    case "^": return a ** b;
-    default: 
-      throw new Error("ERROR: Operador desconhecido " + op);
-  }
-}
-
-function existeEm(b, B) {
-  if(!Number.isInteger(b))
-    throw new Error("ERROR: Sintaxe");
-  
-  if(b % mmcB[B] != 0)
-    throw new Error("ERROR: Não é válido para " + B);
-
-  combLinNugget(b, B, false)
-  return true;
-}
-
-function calculate2(txtEq) {
-  let ref = "";
-  let fila = [];
-
-  /* filtrar o buffer */
-  for(const c of txtEq) { // semelhante a um for(T t : ts)
-    if(c === " ") {
-      if(ref) {
-        fila.push(ref);
-        ref = "";
-      }
-    } else if("+-*/^()?()".includes(c) || "MKBGJP".includes(c)) {
-      if(ref) {
-        fila.push(ref);
-        ref = "";
-      }
-      fila.push(c);
-    } else ref += c;
-  }
-
-  if(ref) fila.push(ref);
-
-  const rpn = [];
-  const op = [];
-
-  /* transformar buffer em RPN */
-  for(const i of fila) {
-    if(!Number.isNaN(Number(i))) {  // se num.
-      rpn.push(Number(i));
-    } else if("MKBGJP".includes(i)) {
-      // Trata os conjuntos como operandos
-      rpn.push(i);
-    } else if(i in precedencia) {
-      while(op.length > 0 && op[op.length - 1] !== '(' && precedencia[op[op.length - 1]] >= precedencia[i]) {
-        rpn.push(op.pop());
-      }
-      op.push(i);
-    } else if(i === '(') {
-      op.push(i);
-    } else if(i === ')') {
-      while(op.length > 0 && op[op.length - 1] !== '(') {
-        rpn.push(op.pop());
-      }
-      op.pop();
-    } else rpn.push(i);
-  }
-
-  while (op.length > 0) {
-    rpn.push(op.pop());
-  }
-
-  fila = [];
-
-  /* calcular RPN*/
-  for(let i = 0; i < rpn.length; i++) {
-
-    if(!Number.isNaN(Number(rpn[i]))) {  // se num.
-      fila.push(rpn[i]);
-    } else if("MKBGJP".includes(rpn[i])) {
-      fila.push(rpn[i]);
-    } else if("+-*/^".includes(rpn[i])) {  // se op.
-      const b = fila.pop();
-      const a = fila.pop();
-      fila.push(doOp(rpn[i], a, b));
-    } else if (rpn[i] === '?') {
-      // Operador '?' binário: espera o conjunto à esquerda e o valor numérico à direita (ou vice-versa, dependendo da ordem RPN)
-      // Exemplo RPN para "B ? expr": [B, expr, ?] ou [expr, B, ?]
-      const bVal = fila.pop();
-      const setVal = fila.pop();
-      // Identifica qual dos dois é o conjunto e qual é o número
-      let conjunto, numero;
-      if("MKBGJP".includes(setVal)) {
-        conjunto = setVal;
-        numero = bVal;
+function fgetD(n) {
+  let palavras = puzzles[n - 1].split(/\s+/);
+  let i, j, k = 0;
+  i = j = 0;
+  for(let s of palavras) {
+    for(let c of s) {
+      if([4, 8, 12, 16, 20].includes(k)) {
+        clue[i++] = c;
       } else {
-        conjunto = bVal;
-        numero = setVal;
+        res[j++] = c;
       }
-
-      existeEm(numero, conjunto);
-      fila.push(numero); // Retorna o valor avaliado para continuar a expressão se necessário
+      k++;
     }
   }
-
-  return fila.pop();
 }
 
-function fazerCalculo() {    
-  try {
-    const res = calculate2(bffr.value);
+function existeLinOuCol(c, p) {
+  let linMax = p / 4;
+  let colMax = p % 4;
+  for(let jj = 0; jj < 4; jj++) {    
+    if(!ok[jj + 4*linMax] && res[jj + 4*linMax] === c)
+      return true;
 
-    if(res !== null && res !== undefined) {
-      document.getElementById("saidadiv").style.visibility = "visible";
-      stdout.value = res;
+    if(!ok[jj*4 + colMax] && res[jj*4 + colMax] === c)
+      return true;
+  }
+  return false;
+}
 
-      const valor = selectConversor.options[selectConversor.selectedIndex].value;
+async function init() {
+  await loadPuzzles();
+  ok.fill(false);
 
-      try {
-        if(valor === ' ' || !valor) {
-          throw new Error("Nenhuma opção selecionada.");
-        } else if(existeEm(res, valor)) {
-          const comb = combLinNugget(res, valor, true);
-          const cnt = new Map();
+  fgetD(id);
 
-          for(let i = 0; i < nuggetB[valor].length; i++) {
-            cnt.set(nuggetB[valor][i], 0);
-          }
+  resBffr.forEach(e => {
+    e.readOnly = false;
+    e.disabled = false;
+    e.style.borderColor = "black";
+  });
 
-          for(let i = 0; i < comb.length; i++) {
-            let qtd = cnt.get(comb[i])
-            cnt.set(comb[i], qtd + 1)
-          }
+  let i = 0;
+  clueBffr.forEach(e => {
+    e.value = clue[i++];
+    e.style.borderColor = "blue";
+  });
+}
 
-          const fim = nuggetB[valor].map(nugget => cnt.get(nugget));
+function startTimer() {
+  clearInterval(timerInterval);
+  segundos = 0;
+  timerDisplay.style.visibility = "visible";
+  timerDisplay.textContent = "00:00";
 
-          stdout.value += "\n\n" + selectConversor.options[selectConversor.selectedIndex].text;
-          stdout.value += "\n> (" + nuggetB[valor].join(", ") + ")";
-          stdout.value += "\n> (" + fim.join(", ") + ")";
+  timerInterval = setInterval(() => {
+    segundos++;
+    let min = Math.floor(segundos / 60);
+    let sec = segundos % 60;
+    timerDisplay.textContent = String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function doVerif() {
+  let i = 0;
+  for(let b of ok) {
+    if(!b) {
+      if(res[i] === resBffr[i].value.toLowerCase()) {
+        console.log(i, res[i], resBffr[i].value);
+        ok[i] = true;
+        resBffr[i].readOnly = true;
+        resBffr[i].disabled = true;
+        resBffr[i].style.borderColor = "lightgreen";
+        resBffr[i].style.fontColor = "black";
+      } else {
+        resBffr[i].style.borderColor = "#FF746C";
+      }
+    }
+    i++;
+  }
+
+  i = 0;
+  for(let b of ok) {
+    if(!b) {
+      if(existeLinOuCol(resBffr[i].value, i)) {
+        resBffr[i].style.borderColor = "yellow";
+      } 
+    }
+    i++;
+  }
+}
+
+function ganhou() {
+  for(let b of ok) {
+    if(!b) return false;
+  }
+  return true;
+}
+
+function allFill() {
+  for(let c of resBffr) {
+    if(c.value.length !== 1 || !"abcdefghijklmnopqrstuvwxyz".includes(c.value.toLowerCase()))
+      return false;
+  }
+  return true;
+}
+
+function fimOk() {
+  if(!allFill())
+    return;
+
+  doVerif();
+  if(ganhou()) {
+    stopTimer();
+    initBtn.textContent = "Start";
+    cmt.style.visibility = "visible";
+    cmt.textContent = "\nOh...\nUma matriz completa.\nQue raridade!";
+  }
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+verfBtn.addEventListener("click", function() { fimOk(); });
+initBtn.addEventListener("click", 
+  function() {  
+    resBffr.forEach(e => { e.value = ""; });
+    init();
+    startTimer();
+    initBtn.textContent = "Reset";
+  });
+
+reservaBtn.addEventListener("click", () => { popUp.showModal(); });
+fecharBtn.addEventListener("click", () => { popUp.close(); });
+
+okBtn.addEventListener("click", 
+  function() {
+    const n = Number(popUpNum.value);
+
+    if(!Number.isInteger(n) || n < 1 || n > 366) {
+      popUpNum.focus();
+      return;
+    }
+
+    id = n;
+    popUp.close();
+
+  
+    init();
+    startTimer();
+    initBtn.textContent = "Reset";
+  });
+
+randomBtn.addEventListener("mouseenter", () => { randomBtn.textContent = "Lucky?"; });
+randomBtn.addEventListener("mouseleave", () => { randomBtn.textContent = "Puzzle:"; });
+randomBtn.addEventListener("click", function() { popUpNum.value = getRandomInt(1, 366); });
+
+function mover(init, passos) {
+  let p = init + passos;
+
+  while(p >= 0 && p < resBffr.length) {
+    if(!ok[p]) {
+      resBffr[p].focus();
+      return;
+    }
+    p += passos;
+  }
+}
+
+resBffr.forEach((e, i) => {
+  // depois input vá próximo...
+  e.addEventListener("input", function() {
+    if(this.value.length > 0) {
+      mover(i, 1);
+    }
+  });
+
+  // mover pela seta
+  e.addEventListener("keydown", function(event) {
+    let loop = true;
+    switch(event.key) {
+      case "ArrowRight":
+        event.preventDefault();
+        mover(i, 1);
+        break;
+      case "ArrowLeft":
+        event.preventDefault();
+        mover(i, -1);
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        if(i === 13 || i === 16 || i === 10)
+          mover(i, -7);
+        else
+          mover(i, -4);
+        break;
+      case "ArrowDown":
+        event.preventDefault();
+        if(i === 3 || i === 6 || i === 9)
+          mover(i, 7);
+        else
+          mover(i, 4)
+        break;
+      case "Backspace":
+        if(this.value === "") {
+          mover(i, -1);
         }
-      } catch(e) {
-        stdout.value += "\n\n" + e.message;
-      }
+        break;
+      case "Enter":
+        event.preventDefault();
+        fimOk();
+        break;
     }
-  } catch(e) {
-    document.getElementById("saidadiv").style.visibility = "visible";
-    stdout.value = e.message;
-  }
-}
-
-bffr.addEventListener("keydown", function (event) {
-  if(event.key === "Enter") {
-    fazerCalculo();
-  }
+  });
 });
 
-selectConversor.addEventListener("change", function () {
-  if (bffr.value.trim() !== "" && selectConversor.value !== " ") {
-    fazerCalculo();
+window.addEventListener("load", async () => {
+  try {
+    let response = await fetch("./s.txt");
+
+    console.log("Status:", response.status);
+
+    let txt = await response.text();
+
+    console.log("First line:", txt.split(/\r?\n/)[0]);
+
+    ok.fill(false);
+
+    resBffr.forEach(e => {
+        e.value = "";
+        e.readOnly = true;
+        e.disabled = true;
+        e.style.borderColor = "";
+    });
+
+    clueBffr.forEach(e => {
+        e.value = "";
+    });
+
+    clearInterval(timerInterval);
+    segundos = 0;
+    timerDisplay.textContent = "00:00";
+  } catch(err) {
+    console.error(err);
   }
 });
