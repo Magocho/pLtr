@@ -1,0 +1,241 @@
+body {
+  max-width: 720px;
+  margin: 0 auto;
+  background-color: #f2f0ef;
+}
+
+article { padding: 3pt 2pt 2pt 3pt; }
+input:focus {outline:none;}
+
+header {
+  background-color: #001899;
+  margin: 0 auto;
+}
+
+header h3 {
+  color: white;
+  margin: 0;
+  font-family: monospace;
+  padding: 6pt 4pt 4pt 6pt;
+}
+
+.corpus {
+  /* background-color: #FAF0E6; */
+  /* border: 1px double #7A90FF;*/
+  border-radius: 1px;
+}
+
+.frase{ text-align: right; }
+.lin {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+#colComment {
+  justify-content: center;
+  align-items: center;
+}
+
+#tooltip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+#aHelp {
+  background-color: white;
+  padding: 6pt 8pt 6pt 8pt;
+}
+
+#timer { 
+  visibility: hidden;
+  font-size: 36px; 
+  margin: 0; 
+}
+
+#timerlin {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+}
+
+#preparar { padding: 6pt 10pt 6pt 10pt; }
+.btnTema:hover { transform: scale(1.14); }
+.btnaTema:active { transform: scale(0.97); }
+.btnTema {
+  font-size: 16px;
+  height: 31px;
+  border: 2px solid #1F338D;
+  border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: black;
+  box-sizing: border-box;
+}
+
+.btnImage {
+  margin-left: auto;
+  position: relative;
+  width: 175px;
+}
+
+.btnImage img {
+  width: 175px;
+  display: block;
+}
+
+.btnVerificar:hover {
+  transform: translate(-100%, -14%) scale(1.07);
+  background-color: chocolate;
+}
+.btnVerificar:active { transform: translate(-100%, -14%) scale(0.97); }
+.btnVerificar {
+  font-size: 14px;
+  border: 2px solid black;
+  position: absolute;
+  width: 87px;
+  height: 62px;
+  left: 50%;
+  top: 70%;
+  border-radius: 2px 6px 2px 4px;
+  background-color: white;
+  cursor: pointer;
+  transform: translate(-100%, -14%);
+  transition: transform 0.2s ease;
+}
+
+button {
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
+
+#comment {
+  visibility: hidden;
+  border: 2px dashed #555;
+  border-radius: 12px;
+  padding-left: 12px;
+  outline: none;
+  resize: none;
+  font-size: 14px;
+}
+
+.matriz {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  border-top: 2px dashed;
+  border-bottom: 2px dashed;
+}
+
+.matriz .lin {
+  display: flex;
+  gap: 5px;
+}
+
+.iletra:focus {
+  outline: none;
+  border-color: purple !important;
+  border-bottom: 8px solid purple;
+  caret-color: transparent;
+  background-color: #DAB1DA;
+  transform: scale(1.08);
+}
+
+.iletra {
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 0px;
+  border: 6px double silver;
+  transition: transform 0.15s ease,              
+              border-color 0.2s ease,
+              background-color 0.2s ease;
+
+  &:disabled {
+    pointer-events: none;
+    color: black;
+    opacity: 1;
+  }
+}
+
+.idica {
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 0px;
+  border: 6px double lightblue;
+
+  &:disabled {  
+    color: black;
+    opacity: 1;
+  }
+}
+
+#popUp {
+  padding: 50px 100px 50px 100px;
+  background-color: white;
+  text-align: left;
+  border-radius: 12px;
+  border: 0px;
+
+  ::backdrop {
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(10px);
+  }
+
+  .pos {  
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+#fechar {
+  font-size: 20px;
+  border: none;
+  background-color: none;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#sorte {
+  font-size: 14px;
+  cursor: pointer;
+  :hover {
+  }
+}
+
+#fim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

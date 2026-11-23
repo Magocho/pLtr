@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <title>pLtr</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" href="img/tmp.svg">
+  <script src="magick.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="corpus">
+    <header>
+      <h3> D'oh! Palavras...</h3>
+    </header>
+
+    <main>
+      <br>
+      <div class="frase">
+        <q> Letra, Palavras, Pontuação... Nunca ouvi falar, é da França do 40k?</q>
+        <p>— Machado de Assis, <cite>após Stories-Bones-Tell (Planetescape)</cite></p>
+      </div>
+
+      <h1>pLtr.</h1>
+
+      <div class="lin">
+        <div class="col">
+          <div id="tooltip" class="lin">
+            <button type="button" id="preparar" class="btnTema">Start</button>
+            <a id="aHelp" href="#comoJ" class="btnTema">?</a>
+            <button type="button" id="reserva" class="btnTema">Mais</button>
+          </div>        
+        </div>        
+        <div class="col">
+          <div id="timerlin" class="lin">
+            <p id="timer">00:00</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="btnImage">
+            <button type="button" id="verif" class="btnVerificar">Confirmar</button>
+            <img src="img/Old_Man_And_Books_j4p4n.png" alt="Old Man and Books" width="175px">
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <div class="matriz">
+        <div class="lin">
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="idica" type="text" maxlength="1" readonly="true" placeholder="-" disabled>
+        </div>      
+        <div class="lin">
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="idica" type="text" maxlength="1" readonly="true" placeholder="-" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+        </div>      
+        <div class="lin">
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="idica" type="text" maxlength="1" readonly="true" placeholder="-" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+        </div>      
+        <div class="lin">
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="idica" type="text" maxlength="1" readonly="true" placeholder="-" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+        </div>      
+        <div class="lin">
+          <input class="idica" type="text" maxlength="1" readonly="true" placeholder="-" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+          <input class="iletra" type="text" maxlength="1" readonly="true" disabled>
+        </div>
+      </div>
+      <br>
+
+      <div class="lin">
+        <div class="col">
+          <img src="img/Man_Reading_to_Cat_Selanit.png" alt="Old Man and Books" width="350px">
+        </div>      
+        <div class="col" id="colComment">
+          <textarea name="textarea" id="comment" rows="5" cols="20" readonly>teste</textarea>
+        </div>
+      </div>
+    </main>
+    <br>
+
+    <article>
+      <h2 id="comoJ"> Como jogar </h2>
+
+      <div class="lin">
+        <ol>
+          <li>Para começar, clique em <b>Start</b>;</li>
+          <br>
+          <li>Preencha toda a martriz;</li>
+          <br>
+          <li>Clique "Confirmar" ou digite &lt;Enter&gt;;</li>
+          <br>
+          <li>Todos quadrados verdes, <i>Huzzah!</i> Do contrário:</li>
+          <br>
+          <ol type="i">
+            <li>Se amarelo, posição errada;<br>(pertence a outro quadrado da linha ou coluna).</li>
+            <br>
+            <li>Se vermelho, letra errada (tente outra);</li>
+          </ol>
+          <br>
+          <li>Repita 2 até acertar.<br> Boa sorte!</li>
+        </ol>
+        <div class="col">
+          <img src="img/Cat_Reading_Johnny_Automatic.png" alt="Cat Reading" width="150px">
+        </div>
+      </div>
+    </article>
+
+    <br>
+    <footer>
+      <h2> Observações </h2>
+
+      <p>
+      As imagens foram retiradas de <a href="https://openclipart.org/">Openclipart</a> 
+      — excelente projeto — disponibilizadas respectivamente por 
+      <a href="https://openclipart.org/detail/183916/old-man-and-books">J4p4n (2013)</a>, por
+      <a href="https://openclipart.org/detail/16346/man-reading-to-cat">Selanit (2008)</a> e por
+      <a href="https://openclipart.org/detail/4502/cat-reading">Johnny_automatic (2007)</a>.
+      </p> 
+
+      <p>
+      Da implementação, ela não veio das musas.
+      Mas na prática, dependeu da inspiração de diversos autores 
+      (dos quais adaptei certas partes):
+      </p>
+
+      <i> — Recomendo visitar todos...</i>
+
+      <ul>
+        <li>
+          <a href="https://term.ooo/">Termo</a> por <a href="https://openclipart.org/detail/183916/old-man-and-books">Serboncini (2020)</a> 
+          <br> — Ótimo puzzle que inspirou a questão: <i>"Uhm... E se fosse 5x5?"</i>
+        </li>
+        <br>
+
+        <li>
+          <a href="https://gisnep.com/">Gisnep</a> por <a href="https://ironicsans.ghost.io/made-new-daily-puzzle-called-gisnep/">Friedman (2024)</a> 
+          <br >— Outro curioso puzzle, que tem um excelente menu (além de ser viciante).
+        </li>
+        <br>
+
+        <li>
+          <a href="https://filiph.github.io/unsure/">Unsure Calculator</a> por <a href="https://filiph.net/">Hráček (2020)</a>
+          <br>— Uma curiosa calculadora, o estilo do site fez necessário as imagens aqui.
+        </li>
+        <br>
+
+        <li>
+          <a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/">The Computer Language 25.03 Benchmarks Game</a> por <a href="https://filiph.net/">Gouy (s.d.)</a>
+          <br>— Um dos sites mais prazerosos aos olhos, tentei ter um template semelhante.
+        </li>
+      </ul>
+
+      <p>
+      Sem faltar a fascinante documentação de <a href="https://developer.mozilla.org/en-US/">MDN Web Docs</a>, 
+      dos quais exemplos viraram a base de uma boa parte dos html, css e js. Para mais sobre as matrizes veja 
+      <a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/">aqui</a>.
+      </p>
+
+      <p> A seguir uma seção de Referência mais <i>formal</i> com tudo que explorei.</p>
+
+      <div class="frase">
+        c.b.&c.b.
+        <br> ldlc
+      </div>
+
+      <h2> Referências </h2>
+      HRACEK, Filip. Unsure Calculator. 2020. Disponível em: 
+      <a href="https://github.com/filiph/unsure">https://github.com/filiph/unsure</a>.
+      <br><br>
+      BAKUKHIN, Aleksandr; LOMAKIN, Artem. Win95.CSS. 2019. Disponível em: 
+      <a href="https://github.com/AlexBSoft/win95.css/tree/master">https://github.com/AlexBSoft/win95.css/tree/master</a>.
+      <br><br>
+      (A TERMINAR)
+      <br><br>
+    </footer>
+  </div>          
+
+  <dialog id="popUp">
+    <div class="pos">
+      <button type="button" id="fechar">X</button>
+    </div>
+
+    <div class="lin">
+      <h2>Outra Matriz:</h2>
+    </div>
+    <br>
+
+    <div class="lin">
+      <button type="button" id="sorte">Puzzle:</button>
+      <input type="number" id="mNumero" min="1" max="366" value="1" required>
+    </div>
+    <br>
+
+    <div class="lin" id="fim">
+      <button type="button" class="btnTema" id="okPopUp">ok!</button>
+    </div>
+  </dialog>
+</body>
+
+</html>
